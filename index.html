@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CCR Marketing — Websites for Kansas Trades</title>
+<meta name="description" content="CCR Marketing builds professional websites for tree services, roofers, fencing and concrete crews across Kansas. Based in Lawrence — see a free mockup before you pay anything." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Sora:wght@600;700;800&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --space:#04050c; --space-2:#080a16;
+    --accent:#9d72ff; --accent-2:#c9b3ff; --violet:#7c5cff;
+    --text:#eef1fb; --muted:#9aa3c0; --muted-2:#6a7193;
+    --glass:rgba(146,160,210,.06); --glass-2:rgba(146,160,210,.09);
+    --line:rgba(160,175,225,.14); --line-2:rgba(160,175,225,.24);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:'Inter',system-ui,sans-serif;color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden;
+    background:
+      radial-gradient(1200px 700px at 78% 8%,rgba(157,114,255,.16),transparent 60%),
+      radial-gradient(1000px 800px at 12% 90%,rgba(124,92,255,.16),transparent 60%),
+      linear-gradient(180deg,#04050c,#070912 60%,#04050c)}
+  ::selection{background:var(--accent);color:#04050c}
+  h1,h2,h3,h4,.disp{font-family:'Sora',sans-serif;letter-spacing:-.025em;line-height:1.02}
+  .gk{font-family:'Space Grotesk',sans-serif}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 30px}
+  @media(max-width:600px){.wrap{padding:0 20px}}
+
+  /* 3D bg canvas */
+  #space{position:fixed;inset:0;z-index:0;display:block;width:100%;height:100%}
+  .vignette{position:fixed;inset:0;z-index:1;pointer-events:none;
+    background:radial-gradient(ellipse 120% 80% at 50% 0%,transparent 55%,rgba(4,5,12,.55) 100%),
+               linear-gradient(180deg,rgba(4,5,12,.4),transparent 18%,transparent 82%,rgba(4,5,12,.7))}
+  .content{position:relative;z-index:2}
+
+  /* labels */
+  .label{font-family:'Space Grotesk';font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.22em;color:var(--accent-2);display:inline-flex;align-items:center;gap:11px}
+  .label::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 14px var(--accent),0 0 4px var(--accent)}
+
+  /* buttons */
+  .btn{display:inline-flex;align-items:center;gap:10px;font-family:'Space Grotesk';font-weight:600;font-size:14.5px;letter-spacing:.01em;
+    padding:15px 28px;border-radius:999px;border:1px solid transparent;cursor:pointer;color:#0a0710;
+    background:linear-gradient(180deg,#bda4ff,var(--accent));box-shadow:0 0 30px -6px rgba(157,114,255,.6),inset 0 1px 0 rgba(255,255,255,.4);transition:transform .2s,box-shadow .2s}
+  .btn:hover{transform:translateY(-2px);box-shadow:0 0 44px -4px rgba(157,114,255,.85),inset 0 1px 0 rgba(255,255,255,.4)}
+  .btn .arr{transition:transform .25s}.btn:hover .arr{transform:translateX(4px)}
+  .btn-glass{background:var(--glass-2);color:var(--text);border:1px solid var(--line-2);box-shadow:none;backdrop-filter:blur(10px)}
+  .btn-glass:hover{background:rgba(160,175,225,.16);box-shadow:0 0 30px -10px rgba(160,175,225,.4)}
+
+  /* panels */
+  .glass{background:linear-gradient(180deg,rgba(146,160,210,.08),rgba(146,160,210,.03));
+    border:1px solid var(--line);border-radius:20px;backdrop-filter:blur(14px) saturate(140%);
+    box-shadow:0 30px 70px -40px rgba(0,0,0,.8),inset 0 1px 0 rgba(255,255,255,.06)}
+
+  /* reveal w/ depth */
+  .rv{opacity:0;transform:translateY(40px) translateZ(-60px);transition:opacity 1s cubic-bezier(.16,.84,.3,1),transform 1s cubic-bezier(.16,.84,.3,1)}
+  .rv.in{opacity:1;transform:none}
+  .d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}.d4{transition-delay:.4s}
+
+  /* nav */
+  header.nav{position:fixed;top:0;left:0;right:0;z-index:50;transition:background .35s,border-color .35s,backdrop-filter .35s;border-bottom:1px solid transparent}
+  header.nav.scrolled{background:rgba(6,8,18,.6);backdrop-filter:blur(16px) saturate(160%);border-bottom:1px solid var(--line)}
+  .nav .wrap{display:flex;align-items:center;justify-content:space-between;height:74px}
+  .brand{font-family:'Sora';font-weight:800;font-size:20px;letter-spacing:-.02em;display:flex;align-items:center;gap:11px}
+  .brand .mk{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#0a0710;
+    background:linear-gradient(135deg,var(--accent-2),var(--accent));box-shadow:0 0 22px -4px rgba(157,114,255,.8)}
+  .navlinks{display:flex;gap:34px}
+  .navlinks a{font-family:'Space Grotesk';font-weight:500;font-size:14px;color:var(--muted);transition:color .2s}
+  .navlinks a:hover{color:var(--text)}
+  @media(max-width:880px){.navlinks{display:none}}
+
+  /* hero */
+  .hero{min-height:100vh;display:flex;align-items:center;padding:120px 0 90px;perspective:1000px}
+  .hero .inner{max-width:880px}
+  .hero h1{font-size:clamp(44px,7.4vw,92px);font-weight:800;margin:26px 0 0;text-shadow:0 0 50px rgba(157,114,255,.25)}
+  .hero h1 .ac{background:linear-gradient(100deg,var(--accent-2),var(--accent));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero .sub{font-size:clamp(17px,2vw,21px);color:var(--muted);max-width:560px;margin:28px 0 0}
+  .hero .acts{display:flex;gap:14px;flex-wrap:wrap;margin-top:36px}
+  .hero .meta{margin-top:46px;display:flex;gap:14px;flex-wrap:wrap}
+  .hero .pill{display:flex;align-items:center;gap:10px;padding:11px 18px;border-radius:999px;font-size:13.5px;color:var(--muted)}
+  .hero .pill b{font-family:'Sora';color:var(--text)}
+  .scrollcue{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);font-family:'Space Grotesk';font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted-2);display:flex;flex-direction:column;align-items:center;gap:10px}
+  .scrollcue .m{width:22px;height:36px;border:1.5px solid var(--line-2);border-radius:12px;position:relative}
+  .scrollcue .m::after{content:"";position:absolute;top:7px;left:50%;width:3px;height:7px;border-radius:2px;background:var(--accent);transform:translateX(-50%);animation:drop 1.8s infinite}
+  @keyframes drop{0%{opacity:0;transform:translate(-50%,0)}30%{opacity:1}100%{opacity:0;transform:translate(-50%,12px)}}
+  @media(max-width:600px){.scrollcue{display:none}}
+
+  /* section */
+  .sec{padding:120px 0;perspective:1200px}
+  .sec-top{max-width:680px;margin:0 auto 70px;text-align:center}
+  .sec-top h2{font-size:clamp(32px,5vw,58px);font-weight:800;margin:18px 0 0}
+  .sec-top p{color:var(--muted);font-size:18px;margin-top:16px}
+
+  /* feature orbit grid */
+  .feat{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  .fcell{padding:30px;transition:transform .4s cubic-bezier(.16,.84,.3,1),border-color .4s,box-shadow .4s}
+  .fcell:hover{transform:translateY(-8px);border-color:rgba(157,114,255,.4);box-shadow:0 40px 80px -50px rgba(157,114,255,.6),inset 0 1px 0 rgba(255,255,255,.07)}
+  .fcell .ic{width:50px;height:50px;border-radius:13px;display:flex;align-items:center;justify-content:center;margin-bottom:18px;
+    background:radial-gradient(circle at 30% 25%,rgba(157,114,255,.32),rgba(157,114,255,.06));border:1px solid rgba(157,114,255,.3)}
+  .fcell .ic svg{width:24px;height:24px;color:var(--accent-2)}
+  .fcell h3{font-size:19px;font-weight:700;margin-bottom:9px}
+  .fcell p{color:var(--muted);font-size:15px}
+  .fcell.wide{grid-column:span 2}
+  @media(max-width:860px){.feat{grid-template-columns:1fr 1fr}.fcell.wide{grid-column:span 2}}
+  @media(max-width:560px){.feat{grid-template-columns:1fr}.fcell.wide{grid-column:span 1}}
+
+  /* process */
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+  .step{padding:28px 24px 30px}
+  .step .sn{font-family:'Sora';font-weight:800;font-size:14px;color:var(--accent-2);letter-spacing:.05em;margin-bottom:16px;display:inline-flex;align-items:center;gap:8px}
+  .step .sn::before{content:"";width:30px;height:1px;background:var(--accent)}
+  .step h4{font-size:18px;font-weight:700;margin-bottom:9px}
+  .step p{color:var(--muted);font-size:14.5px}
+  @media(max-width:780px){.steps{grid-template-columns:1fr 1fr}}
+  @media(max-width:460px){.steps{grid-template-columns:1fr}}
+
+  /* quote */
+  .quote{max-width:860px;margin:0 auto;text-align:center;padding:60px 44px}
+  .quote .st{color:var(--accent-2);font-size:22px;letter-spacing:4px;text-shadow:0 0 20px rgba(201,179,255,.5)}
+  .quote blockquote{font-family:'Sora';font-weight:800;font-size:clamp(24px,3.6vw,38px);line-height:1.25;margin:20px 0 18px}
+  .quote blockquote .ac{color:var(--accent-2)}
+  .quote .by{color:var(--muted);font-weight:500;font-family:'Space Grotesk'}
+
+  /* pricing */
+  .prices{display:grid;grid-template-columns:1.12fr 1fr;gap:22px;max-width:920px;margin:0 auto}
+  .price{padding:42px;position:relative;overflow:hidden}
+  .price.feat-card{border-color:rgba(157,114,255,.4);box-shadow:0 40px 90px -50px rgba(157,114,255,.6),inset 0 1px 0 rgba(255,255,255,.08)}
+  .price.feat-card::after{content:"";position:absolute;width:340px;height:340px;border-radius:50%;top:-160px;right:-120px;
+    background:radial-gradient(circle,rgba(157,114,255,.3),transparent 70%);filter:blur(20px)}
+  .price .pt{font-family:'Space Grotesk';font-weight:600;font-size:13px;text-transform:uppercase;letter-spacing:.14em;color:var(--accent-2);position:relative}
+  .price .amt{font-family:'Sora';font-weight:800;font-size:60px;line-height:.9;margin:14px 0 6px;position:relative}
+  .price .amt small{font-size:18px;font-weight:600;color:var(--muted)}
+  .price .pd{color:var(--muted);font-size:14.5px;margin-bottom:26px;position:relative}
+  .price ul{list-style:none;display:grid;gap:13px;margin-bottom:30px;position:relative}
+  .price li{display:flex;gap:12px;font-size:15px;align-items:flex-start}
+  .price li svg{width:19px;height:19px;color:var(--accent-2);flex:0 0 19px;margin-top:2px}
+  .price .btn,.price .btn-glass{width:100%;justify-content:center;position:relative}
+  .badge{position:absolute;top:20px;right:22px;font-family:'Space Grotesk';font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.08em;
+    padding:7px 14px;border-radius:999px;background:linear-gradient(180deg,#bda4ff,var(--accent));color:#0a0710;z-index:2}
+  @media(max-width:780px){.prices{grid-template-columns:1fr}}
+
+  /* cta form */
+  .ctaform{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+  .ctaform h2{font-size:clamp(32px,4.8vw,58px);font-weight:800}
+  .ctaform .lead{color:var(--muted);font-size:18px;margin:22px 0 28px;max-width:40ch}
+  .ticks{list-style:none;display:grid;gap:14px}
+  .ticks li{display:flex;gap:13px;align-items:flex-start;font-size:15px}
+  .ticks svg{width:21px;height:21px;color:var(--accent-2);flex:0 0 21px;margin-top:1px}
+  .form{padding:38px}
+  .form h3{font-size:23px;font-weight:700;margin-bottom:5px}
+  .form .sm{color:var(--muted);font-size:13.5px;margin-bottom:20px}
+  .form label{display:block;font-family:'Space Grotesk';font-weight:500;font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:15px 0 7px}
+  .form input,.form select{width:100%;padding:14px 16px;border:1px solid var(--line-2);border-radius:11px;font-size:15px;font-family:inherit;
+    background:rgba(8,10,22,.6);color:var(--text)}
+  .form input::placeholder{color:var(--muted-2)}
+  .form input:focus,.form select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(157,114,255,.18)}
+  .form .btn{width:100%;justify-content:center;margin-top:22px;font-size:16px;padding:17px}
+  @media(max-width:880px){.ctaform{grid-template-columns:1fr;gap:40px}}
+
+  /* footer */
+  footer{border-top:1px solid var(--line);padding:60px 0 40px;position:relative;z-index:2}
+  footer .ft{display:flex;justify-content:space-between;flex-wrap:wrap;gap:30px;padding-bottom:30px;border-bottom:1px solid var(--line)}
+  footer .big{font-family:'Sora';font-weight:800;font-size:clamp(34px,6vw,72px);line-height:.92;letter-spacing:-.03em}
+  footer .big .ac{background:linear-gradient(100deg,var(--accent-2),var(--accent));-webkit-background-clip:text;background-clip:text;color:transparent}
+  footer .col h5{font-family:'Space Grotesk';font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:14px}
+  footer .col a{display:block;margin-bottom:10px;color:var(--muted)}footer .col a:hover{color:var(--accent-2)}
+  footer .legal{padding-top:24px;font-size:13px;color:var(--muted-2);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+</style>
+</head>
+<body id="top">
+
+  <canvas id="space"></canvas>
+  <div class="vignette"></div>
+
+  <div class="content">
+
+    <!-- NAV -->
+    <header class="nav" id="nav">
+      <div class="wrap">
+        <a href="#top" class="brand"><span class="mk">CCR</span>CCR Marketing</a>
+        <nav class="navlinks">
+          <a href="#work">What We Do</a>
+          <a href="#process">Process</a>
+          <a href="#pricing">Pricing</a>
+          <a href="#start">Contact</a>
+        </nav>
+        <a href="#start" class="btn" style="padding:11px 22px;font-size:13.5px">Get a Free Mockup</a>
+      </div>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="wrap">
+        <div class="inner">
+          <span class="label rv in">Lawrence, KS · Websites for the Trades</span>
+          <h1 class="rv">Your reputation is stellar.<br>Make your <span class="ac">website</span> match it.</h1>
+          <p class="sub rv d1">We build fast, professional websites for Kansas tree services, roofers, fencing and concrete crews — and we'll launch a free mockup of yours into orbit before you pay a dime.</p>
+          <div class="acts rv d2">
+            <a href="#start" class="btn">Get My Free Mockup <span class="arr">→</span></a>
+            <a href="#work" class="btn btn-glass">See What's Included</a>
+          </div>
+          <div class="meta rv d3">
+            <div class="pill glass"><b>48 hrs</b> Build to live</div>
+            <div class="pill glass"><b>$649</b> One-time · you own it</div>
+            <div class="pill glass"><b>No contract</b> Cancel anytime</div>
+          </div>
+        </div>
+      </div>
+      <div class="scrollcue"><div class="m"></div>Scroll to explore</div>
+    </section>
+
+    <!-- PROBLEM / MANIFESTO -->
+    <section class="sec">
+      <div class="wrap">
+        <div class="glass rv" style="padding:56px 48px;text-align:center;max-width:920px;margin:0 auto">
+          <span class="label" style="justify-content:center">The Problem</span>
+          <p class="disp" style="font-size:clamp(24px,3.6vw,42px);font-weight:800;line-height:1.15;margin-top:22px;max-width:20ch;margin-left:auto;margin-right:auto">
+            When a homeowner Googles you and finds nothing to click, they don't call. <span style="color:var(--accent-2)">They call the next guy.</span>
+          </p>
+          <p style="color:var(--muted);font-size:17px;margin-top:22px;max-width:54ch;margin-left:auto;margin-right:auto">
+            A Facebook page isn't a website. Competitors with worse reviews look more legit, leads slip through, and you pay for that gap in jobs you never knew you lost. A real site closes it.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="sec" id="work">
+      <div class="wrap">
+        <div class="sec-top rv">
+          <span class="label" style="justify-content:center">What You Get</span>
+          <h2>Engineered to win jobs.</h2>
+          <p>No filler. Every site is built for one mission — turning visitors into booked estimates.</p>
+        </div>
+        <div class="feat">
+          <div class="fcell glass wide rv">
+            <div class="ic"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg></div>
+            <h3>Built Around Your 5-Star Reviews</h3>
+            <p>Your real Google reviews go front and center — the single biggest thing that turns a stranger into a paying customer. We make your reputation impossible to miss.</p>
+          </div>
+          <div class="fcell glass rv d1">
+            <div class="ic"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M11 18h2"/></svg></div>
+            <h3>Mobile-First</h3>
+            <p>Loads fast and looks sharp on every phone.</p>
+          </div>
+          <div class="fcell glass rv d1">
+            <div class="ic"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 8l9 6 9-6M3 8v10a1 1 0 001 1h16a1 1 0 001-1V8M3 8l9-5 9 5"/></svg></div>
+            <h3>Leads To Your Phone</h3>
+            <p>A clean quote form that pings you instantly.</p>
+          </div>
+          <div class="fcell glass rv d2">
+            <div class="ic"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></div>
+            <h3>Found On Google</h3>
+            <p>Set up for "[your trade] near me" searches.</p>
+          </div>
+          <div class="fcell glass wide rv d2">
+            <div class="ic"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg></div>
+            <h3>You Own It — No Hostage Hosting</h3>
+            <p>One-time build, on your own domain, yours to keep. No contracts, no lock-in. Optional upkeep only if you want us handling updates.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROCESS -->
+    <section class="sec" id="process">
+      <div class="wrap">
+        <div class="sec-top rv">
+          <span class="label" style="justify-content:center">How It Works</span>
+          <h2>A simple launch sequence.</h2>
+          <p>Risk-free start to finish. You don't pay a dime until you've seen exactly what you're getting.</p>
+        </div>
+        <div class="steps">
+          <div class="step glass rv"><div class="sn">01</div><h4>Free Mockup</h4><p>We build a real preview using your business, reviews and photos. No cost, no commitment.</p></div>
+          <div class="step glass rv d1"><div class="sn">02</div><h4>You Review</h4><p>Like it? Great. Want changes? We tweak it. You only move forward if it's a yes.</p></div>
+          <div class="step glass rv d2"><div class="sn">03</div><h4>Go Live</h4><p>We launch it on your domain in 48 hours, wired to send every lead straight to you.</p></div>
+          <div class="step glass rv d3"><div class="sn">04</div><h4>Optional Upkeep</h4><p>Want us keeping it fresh with new photos and offers? Add the care plan — totally optional.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- QUOTE -->
+    <section class="sec" style="padding:90px 0">
+      <div class="wrap">
+        <div class="quote glass rv">
+          <div class="st">Why we do this</div>
+          <blockquote>Every site we build has <span class="ac">one job</span> — turning your hard-earned reputation into booked work.</blockquote>
+          <div class="by">— CCR Marketing · Lawrence, Kansas</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRICING -->
+    <section class="sec" id="pricing">
+      <div class="wrap">
+        <div class="sec-top rv">
+          <span class="label" style="justify-content:center">Pricing</span>
+          <h2>One fair price.</h2>
+          <p>No retainers you don't want. No surprise invoices. You pay once, and the site is yours.</p>
+        </div>
+        <div class="prices">
+          <div class="price glass feat-card rv">
+            <span class="badge">Most Popular</span>
+            <div class="pt">Website Build</div>
+            <div class="amt">$649<small> one-time</small></div>
+            <div class="pd">Less than a single job pays for — and it's yours to keep.</div>
+            <ul>
+              <li><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> Custom, mobile-first website</li>
+              <li><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> Built around your Google reviews</li>
+              <li><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> Lead form straight to your phone</li>
+              <li><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> Live on your domain in 48 hours</li>
+              <li><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> No contract — you own it</li>
+            </ul>
+            <a href="#start" class="btn">Get My Free Mockup <span class="arr">→</span></a>
+          </div>
+          <div class="price glass rv d2">
+            <div class="pt">Care Plan — Optional</div>
+            <div class="amt">$49<small> / mo</small></div>
+            <div class="pd">Only if you want us handling everything for you.</div>
+            <ul>
+              <li><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> Hosting &amp; security handled</li>
+              <li><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> New photos &amp; seasonal offers</li>
+              <li><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> Edits whenever you need them</li>
+              <li><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> Cancel anytime</li>
+            </ul>
+            <a href="#start" class="btn btn-glass">Add It Later</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA / FORM -->
+    <section class="sec" id="start">
+      <div class="wrap">
+        <div class="ctaform">
+          <div class="rv">
+            <span class="label">Free · No Obligation</span>
+            <h2 style="margin-top:16px">See your site before you pay a cent.</h2>
+            <p class="lead">Tell us about your business and we'll build a free mockup using your real reviews. Love it? We make it live. If not, no hard feelings.</p>
+            <ul class="ticks">
+              <li><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> A real mockup — not a sales call</li>
+              <li><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> Built specifically for your trade</li>
+              <li><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> Zero risk, zero upfront cost</li>
+            </ul>
+          </div>
+          <form class="form glass rv d2" onsubmit="return sendMockup(event)">
+            <h3>Get My Free Mockup</h3>
+            <div class="sm">We'll get back to you fast — usually the same day.</div>
+            <label>Your Name</label>
+            <input name="name" type="text" placeholder="John Smith" required />
+            <label>Business Name</label>
+            <input name="business" type="text" placeholder="Smith Roofing" required />
+            <label>Phone or Email</label>
+            <input name="contact" type="text" placeholder="(555) 555-5555" required />
+            <label>What do you do?</label>
+            <select name="trade">
+              <option>Tree Service</option>
+              <option>Fencing / Decks</option>
+              <option>Concrete / Masonry</option>
+              <option>Roofing / Restoration</option>
+              <option>Pressure Washing</option>
+              <option>Other Trade</option>
+            </select>
+            <button class="btn" type="submit">Build My Free Mockup <span class="arr">→</span></button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="wrap">
+        <div class="ft">
+          <div>
+            <div class="big">Let's <span class="ac">build it.</span></div>
+            <a href="#start" class="btn" style="margin-top:22px">Get a Free Mockup <span class="arr">→</span></a>
+          </div>
+          <div style="display:flex;gap:56px;flex-wrap:wrap">
+            <div class="col">
+              <h5>Menu</h5>
+              <a href="#work">What We Do</a><a href="#process">Process</a><a href="#pricing">Pricing</a><a href="#start">Contact</a>
+            </div>
+            <div class="col">
+              <h5>Contact</h5>
+              <a href="mailto:ccrmarketingagency@gmail.com">ccrmarketingagency@gmail.com</a>
+              <a href="#start">Request a mockup</a>
+              <span style="display:block;color:var(--muted-2);margin-top:6px">Lawrence, Kansas</span>
+            </div>
+          </div>
+        </div>
+        <div class="legal">
+          <span>© CCR Marketing — Websites for Kansas Trades</span>
+          <span>Serving Lawrence &amp; all of Kansas · Tree · Fencing · Concrete · Roofing</span>
+        </div>
+      </div>
+    </footer>
+
+  </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+  // ---------- mockup form -> email ----------
+  function sendMockup(e){
+    e.preventDefault();
+    const el = e.target.elements;
+    const subject = 'Free mockup request — ' + (el.business.value || '');
+    const body =
+      'Name: ' + (el.name.value || '') + '\n' +
+      'Business: ' + (el.business.value || '') + '\n' +
+      'Contact: ' + (el.contact.value || '') + '\n' +
+      'Trade: ' + (el.trade.value || '');
+    window.location.href = 'mailto:ccrmarketingagency@gmail.com?subject=' +
+      encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+    return false;
+  }
+
+  // ---------- content reveal + nav ----------
+  const nav=document.getElementById('nav');
+  const onScroll=()=>nav.classList.toggle('scrolled',window.scrollY>24);
+  onScroll();window.addEventListener('scroll',onScroll,{passive:true});
+  const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.14,rootMargin:'0px 0px -40px 0px'});
+  document.querySelectorAll('.rv:not(.in)').forEach(el=>io.observe(el));
+
+  // ---------- 3D space scene ----------
+  (function(){
+    if(typeof THREE==='undefined')return;
+    const canvas=document.getElementById('space');
+    const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+    const scene=new THREE.Scene();
+    const camera=new THREE.PerspectiveCamera(72,innerWidth/innerHeight,1,2200);
+    camera.position.z=1;
+    function size(){renderer.setSize(innerWidth,innerHeight);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();}
+    size();window.addEventListener('resize',size);
+    function makeStars(count,spread,depth,size,color,opacity){
+      const g=new THREE.BufferGeometry();
+      const pos=new Float32Array(count*3);
+      for(let i=0;i<count;i++){
+        pos[i*3]  =(Math.random()-.5)*spread;
+        pos[i*3+1]=(Math.random()-.5)*spread;
+        pos[i*3+2]=-Math.random()*depth;
+      }
+      g.setAttribute('position',new THREE.BufferAttribute(pos,3));
+      const m=new THREE.PointsMaterial({color:color,size:size,sizeAttenuation:true,transparent:true,opacity:opacity,depthWrite:false,blending:THREE.AdditiveBlending});
+      const p=new THREE.Points(g,m);scene.add(p);
+      return {p,pos,count,spread,depth};
+    }
+    const farStars =makeStars(1100,1600,2000,1.4,0xbcd0ff,.85);
+    const nearStars=makeStars(450, 1200,1400,2.6,0xc9b8ff,.9);
+    const planet=new THREE.Mesh(
+      new THREE.SphereGeometry(150,96,96),
+      new THREE.MeshStandardMaterial({color:0x3a2c66,emissive:0x0c0820,emissiveIntensity:.6,roughness:1,metalness:.05})
+    );
+    planet.position.set(360,120,-820);scene.add(planet);
+    const atmosphere=new THREE.Mesh(
+      new THREE.SphereGeometry(156,64,64),
+      new THREE.ShaderMaterial({
+        transparent:true,blending:THREE.AdditiveBlending,side:THREE.BackSide,depthWrite:false,
+        uniforms:{c:{value:new THREE.Color(0x9d72ff)}},
+        vertexShader:'varying vec3 vN;void main(){vN=normalize(normalMatrix*normal);gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}',
+        fragmentShader:'varying vec3 vN;uniform vec3 c;void main(){float f=pow(0.72-dot(vN,vec3(0.0,0.0,1.0)),3.0);gl_FragColor=vec4(c,clamp(f,0.0,1.0)*0.9);}'
+      })
+    );
+    atmosphere.position.copy(planet.position);scene.add(atmosphere);
+    scene.add(new THREE.AmbientLight(0x2a2f4d,0.55));
+    const key=new THREE.DirectionalLight(0xf2ecff,2.0);key.position.set(-0.7,0.35,0.6);scene.add(key);
+    const fill=new THREE.PointLight(0x6a4dff,1.4,1600);fill.position.set(620,260,-500);scene.add(fill);
+    let scrollY=window.scrollY,lastScroll=scrollY,warp=0;
+    let mx=0,my=0,tmx=0,tmy=0;
+    window.addEventListener('scroll',()=>{scrollY=window.scrollY;},{passive:true});
+    window.addEventListener('pointermove',e=>{tmx=(e.clientX/innerWidth-.5);tmy=(e.clientY/innerHeight-.5);},{passive:true});
+    const lerp=(a,b,t)=>a+(b-a)*t;
+    function advance(layer,speed){
+      const a=layer.pos;
+      for(let i=0;i<layer.count;i++){
+        a[i*3+2]+=speed;
+        if(a[i*3+2]>30){
+          a[i*3]  =(Math.random()-.5)*layer.spread;
+          a[i*3+1]=(Math.random()-.5)*layer.spread;
+          a[i*3+2]=-layer.depth;
+        }
+      }
+      layer.p.geometry.attributes.position.needsUpdate=true;
+    }
+    function tick(){
+      const delta=scrollY-lastScroll;lastScroll=scrollY;
+      warp=lerp(warp,Math.min(Math.abs(delta)*0.6,42),0.08);
+      advance(farStars, 0.7+warp*0.5);
+      advance(nearStars,1.4+warp);
+      mx=lerp(mx,tmx,0.05);my=lerp(my,tmy,0.05);
+      camera.position.x=lerp(camera.position.x,mx*40,0.06);
+      camera.position.y=lerp(camera.position.y,-my*30,0.06);
+      camera.lookAt(0,0,-400);
+      const py=120 - scrollY*0.06;
+      planet.position.y=py;atmosphere.position.y=py;
+      planet.rotation.y+=0.0014;
+      renderer.render(scene,camera);requestAnimationFrame(tick);
+    }
+    tick();
+  })();
+</script>
+</body>
+</html>
