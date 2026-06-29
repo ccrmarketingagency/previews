@@ -125,7 +125,7 @@
   .quote .by{color:var(--muted);font-weight:500;font-family:'Space Grotesk'}
 
   /* pricing */
-  .prices{display:grid;grid-template-columns:1.12fr 1fr;gap:22px;max-width:920px;margin:0 auto}
+  .prices{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:1040px;margin:0 auto}
   .price{padding:42px;position:relative;overflow:hidden}
   .price.feat-card{border-color:rgba(157,114,255,.4);box-shadow:0 40px 90px -50px rgba(157,114,255,.6),inset 0 1px 0 rgba(255,255,255,.08)}
   .price.feat-card::after{content:"";position:absolute;width:340px;height:340px;border-radius:50%;top:-160px;right:-120px;
@@ -140,7 +140,7 @@
   .price .btn,.price .btn-glass{width:100%;justify-content:center;position:relative}
   .badge{position:absolute;top:20px;right:22px;font-family:'Space Grotesk';font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.08em;
     padding:7px 14px;border-radius:999px;background:linear-gradient(180deg,#bda4ff,var(--accent));color:#0a0710;z-index:2}
-  @media(max-width:780px){.prices{grid-template-columns:1fr}}
+  @media(max-width:980px){.prices{grid-template-columns:1fr;max-width:520px}}
 
   /* cta form */
   .ctaform{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
@@ -197,7 +197,7 @@
         <div class="inner">
           <span class="label rv in">Lawrence, KS · Websites for the Trades</span>
           <h1 class="rv">Your reputation is stellar.<br>Make your <span class="ac">website</span> match it.</h1>
-          <p class="sub rv d1">We build fast, professional websites for Kansas tree services, roofers, fencing and concrete crews — and we'll launch a free mockup of yours into orbit before you pay a dime.</p>
+          <p class="sub rv d1">We build fast, professional websites for Kansas tree services, roofers, fencing and concrete crews — free mockup before you pay a dime — then run the Google ads that keep your phone ringing.</p>
           <div class="acts rv d2">
             <a href="#start" class="btn">Get My Free Mockup <span class="arr">→</span></a>
             <a href="#work" class="btn btn-glass">See What's Included</a>
@@ -298,8 +298,8 @@
       <div class="wrap">
         <div class="sec-top rv">
           <span class="label" style="justify-content:center">Pricing</span>
-          <h2>One fair price.</h2>
-          <p>No retainers you don't want. No surprise invoices. You pay once, and the site is yours.</p>
+          <h2>Pick your plan.</h2>
+          <p>Start with a site you own outright. Add Google ads when you're ready for more leads. No contracts, cancel the monthly stuff anytime.</p>
         </div>
         <div class="prices">
           <div class="price glass feat-card rv">
@@ -315,6 +315,19 @@
               <li><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> No contract — you own it</li>
             </ul>
             <a href="#start" class="btn">Get My Free Mockup <span class="arr">→</span></a>
+          </div>
+          <div class="price glass rv d1">
+            <div class="pt">Ad Management — Add-On</span></div>
+            <div class="amt">$600<small> / mo</small></div>
+            <div class="pd">Fill your new site with leads. We run Google ads; you control the budget.</div>
+            <ul>
+              <li><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> Google Search &amp; Local Services Ads</li>
+              <li><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> Targeted to your town &amp; service</li>
+              <li><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> Every lead tracked to calls &amp; jobs</li>
+              <li><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> Plain-English monthly ROI report</li>
+              <li><svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg> $400 one-time setup · cancel anytime</li>
+            </ul>
+            <a href="#start" class="btn btn-glass">Ask About Ads</a>
           </div>
           <div class="price glass rv d2">
             <div class="pt">Care Plan — Optional</div>
@@ -426,7 +439,7 @@
 
   // ---------- 3D space scene ----------
   (function(){
-    if(typeof THREE==='undefined')return;
+    if(typeof THREE==='undefined')return; // CSS gradient fallback stays
     const canvas=document.getElementById('space');
     const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});
     renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
