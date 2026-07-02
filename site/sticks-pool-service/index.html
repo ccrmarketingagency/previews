@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Stick's Pool Service — Pool Cleaning &amp; Maintenance in Eudora &amp; Lawrence, KS</title>
+<meta name="description" content="Weekly pool cleaning, chemical balancing, openings, closings, and heater repair in Eudora, Lawrence, and the KC metro. 25+ years of pool experience. Free estimates." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "Stick's Pool Service",
+  "description": "Pool cleaning, chemical balancing, openings, closings, and heater & equipment repair serving Eudora, Lawrence, and the western KC metro. 25+ years of pool experience. Free estimates.",
+  "telephone": "+17857664819",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "707 E 12th Street",
+    "addressLocality": "Eudora",
+    "addressRegion": "KS",
+    "postalCode": "66025",
+    "addressCountry": "US"
+  },
+  "geo": {"@type": "GeoCoordinates", "latitude": 38.9434, "longitude": -95.0986},
+  "areaServed": ["Eudora KS","Lawrence KS","De Soto KS","Baldwin City KS","Linwood KS","Tonganoxie KS","Olathe KS","Lenexa KS","Shawnee KS","Overland Park KS"],
+  "priceRange": "Free estimates",
+  "paymentAccepted": "Credit Card",
+  "knowsAbout": ["pool cleaning","pool maintenance","pool opening","pool closing","pool winterization","pool heater repair","pool heater installation","pool equipment repair"]
+}
+</script>
+<style>
+  :root{
+    --paper:#f2f4f3;        /* cool editorial paper */
+    --paper-2:#e7ebea;
+    --ink:#121719;          /* near-black cool ink */
+    --ink-soft:#40494b;
+    --muted:#5f6b6d;
+    --line:#ccd5d4;         /* hairline */
+    --line-dark:#1b2224;
+    --accent:#0f6187;       /* deep pool blue — restrained */
+    --accent-2:#c2410c;     /* burnt rust, used VERY sparingly */
+    --max:1240px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:'Inter',system-ui,sans-serif;color:var(--ink);background:var(--paper);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  /* subtle paper grain */
+  body::before{content:"";position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.5;mix-blend-mode:multiply;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E")}
+  .wrap{max-width:var(--max);margin:0 auto;padding:0 32px}
+  a{color:inherit;text-decoration:none}
+  ::selection{background:var(--accent);color:var(--paper)}
+
+  .display{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;line-height:.96;letter-spacing:-.025em}
+  h1,h2,h3{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;letter-spacing:-.02em;line-height:1.02}
+  .mono{font-family:'JetBrains Mono',monospace;font-weight:500;text-transform:uppercase;letter-spacing:.18em;font-size:11.5px}
+  .index{font-family:'JetBrains Mono',monospace;font-weight:600;font-size:13px;color:var(--accent)}
+
+  .rule{height:1px;background:var(--line);border:0;width:100%}
+
+  .btn{display:inline-flex;align-items:center;gap:12px;background:var(--ink);color:var(--paper);font-family:'Bricolage Grotesque';font-weight:600;
+    font-size:15px;padding:16px 26px;border:1px solid var(--ink);border-radius:2px;cursor:pointer;transition:.22s ease;position:relative}
+  .btn:hover{background:var(--accent);border-color:var(--accent);transform:translateY(-1px)}
+  .btn .arr{transition:transform .22s ease}
+  .btn:hover .arr{transform:translateX(4px)}
+  .btn-out{background:transparent;color:var(--ink)}
+  .btn-out:hover{background:var(--ink);color:var(--paper)}
+
+  /* ============ NAV ============ */
+  header.nav{position:sticky;top:0;z-index:50;background:rgba(242,244,243,.82);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .nav .wrap{display:flex;align-items:center;justify-content:space-between;height:74px}
+  .brand{font-family:'Bricolage Grotesque';font-weight:800;font-size:20px;letter-spacing:-.03em;display:flex;align-items:baseline;gap:9px}
+  .brand i{font-style:normal;color:var(--accent);font-family:'JetBrains Mono';font-size:13px;font-weight:600}
+  .nav-links{display:flex;gap:34px;align-items:center}
+  .nav-links a{font-family:'JetBrains Mono';font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);transition:.2s}
+  .nav-links a:hover{color:var(--ink)}
+  .nav .cta-phone{font-family:'Bricolage Grotesque';font-weight:700;font-size:15px;border-bottom:2px solid var(--accent);padding-bottom:2px}
+  @media(max-width:880px){.nav-links{display:none}}
+
+  /* ============ HERO ============ */
+  .hero{position:relative;border-bottom:1px solid var(--line)}
+  .hero .wrap{padding:64px 32px 0}
+  .hero-meta{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:16px;margin-bottom:30px}
+  .hero-meta .loc{max-width:230px;color:var(--ink-soft);font-size:14px;line-height:1.5}
+  .hero h1{font-family:'Bricolage Grotesque';font-weight:800;font-size:clamp(52px,10.5vw,148px);line-height:.9;letter-spacing:-.04em}
+  .hero h1 .em{font-style:italic;font-weight:600;color:var(--accent)}
+  .hero-lower{display:grid;grid-template-columns:1.4fr 1fr;gap:40px;align-items:end;margin:34px 0 0;padding-bottom:54px}
+  .hero-sub{font-size:19px;color:var(--ink-soft);max-width:520px;line-height:1.55}
+  .hero-actions{display:flex;flex-direction:column;gap:16px;align-items:flex-start}
+  .hero-actions .row{display:flex;gap:14px;flex-wrap:wrap}
+  @media(max-width:760px){.hero-lower{grid-template-columns:1fr;gap:26px}}
+
+  /* ============ TICKER ============ */
+  .ticker{background:var(--ink);color:var(--paper);overflow:hidden;border-bottom:1px solid var(--line-dark)}
+  .ticker-track{display:flex;gap:0;white-space:nowrap;animation:scroll 28s linear infinite;width:max-content}
+  .ticker-track span{font-family:'Bricolage Grotesque';font-weight:600;font-size:15px;padding:16px 30px;display:flex;align-items:center;gap:30px}
+  .ticker-track span::after{content:"✦";color:#4da3c7;font-size:12px}
+  @keyframes scroll{to{transform:translateX(-50%)}}
+
+  /* ============ SECTION SCAFFOLD ============ */
+  section{position:relative;z-index:2}
+  .sec{padding:108px 0}
+  .sec-head{display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:start;margin-bottom:60px}
+  .sec-head .num{font-family:'JetBrains Mono';font-weight:600;font-size:13px;color:var(--accent);padding-top:14px}
+  .sec-head h2{font-size:clamp(34px,5.5vw,62px);font-weight:800;font-family:'Bricolage Grotesque';max-width:14ch}
+  .sec-head .lede{grid-column:2;color:var(--muted);font-size:17px;max-width:46ch;margin-top:18px}
+
+  /* ============ SERVICES ============ */
+  .svc-row{display:grid;grid-template-columns:60px 1fr auto;gap:30px;align-items:center;padding:34px 0;border-top:1px solid var(--line);transition:.3s;cursor:default}
+  .svc-row:last-child{border-bottom:1px solid var(--line)}
+  .svc-row:hover{background:linear-gradient(90deg,transparent,rgba(15,97,135,.05),transparent)}
+  .svc-row .si{font-family:'JetBrains Mono';font-weight:600;font-size:14px;color:var(--accent)}
+  .svc-row .sc h3{font-size:clamp(26px,3.4vw,40px);font-weight:700;transition:.3s;letter-spacing:-.02em}
+  .svc-row:hover .sc h3{transform:translateX(10px)}
+  .svc-row .sc p{color:var(--muted);font-size:15.5px;margin-top:6px;max-width:60ch}
+  .svc-row .sk{font-family:'JetBrains Mono';font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--ink-soft);text-align:right;line-height:1.7}
+  @media(max-width:720px){.svc-row{grid-template-columns:40px 1fr;gap:16px}.svc-row .sk{display:none}}
+
+  /* ============ HERO SPEC STRIP ============ */
+  .hero-spec{border-top:1px solid var(--line);background:var(--paper)}
+  .hero-spec .wrap{display:flex;flex-wrap:wrap;gap:14px 40px;padding:20px 32px}
+  .hero-spec span{font-family:'JetBrains Mono';font-size:11.5px;text-transform:uppercase;letter-spacing:.12em;color:var(--ink-soft);display:flex;align-items:center;gap:14px}
+  .hero-spec span::before{content:"◆";color:var(--accent);font-size:8px}
+
+  /* ============ WORK / EVERY VISIT ============ */
+  .work{background:var(--paper-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .joblog{border-top:1px solid var(--line)}
+  .job{display:grid;grid-template-columns:86px 1fr auto;gap:30px;align-items:center;padding:30px 0;border-bottom:1px solid var(--line);transition:background .3s}
+  .job:hover{background:linear-gradient(90deg,transparent,rgba(15,97,135,.06),transparent)}
+  .job .jno{font-family:'Bricolage Grotesque';font-weight:800;font-size:36px;color:var(--accent);line-height:.8;letter-spacing:-.03em}
+  .job .jmain h3{font-size:clamp(21px,2.7vw,30px);font-weight:700;letter-spacing:-.02em;transition:transform .3s}
+  .job:hover .jmain h3{transform:translateX(9px)}
+  .job .jmain p{color:var(--muted);font-size:15px;margin-top:5px;max-width:56ch}
+  .job .jmeta{display:flex;flex-direction:column;gap:3px;text-align:right;font-family:'JetBrains Mono';font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-soft)}
+  .job .jmeta span:first-child{color:var(--ink);font-weight:600}
+  @media(max-width:720px){.job{grid-template-columns:54px 1fr;gap:16px}.job .jmeta{display:none}}
+
+  /* ============ STATS ============ */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr)}
+  .stat{padding:14px 26px;border-left:1px solid var(--line)}
+  .stat:first-child{padding-left:0;border-left:0}
+  .stat .n{font-family:'Bricolage Grotesque';font-weight:800;font-size:clamp(46px,7vw,82px);line-height:.9;letter-spacing:-.03em}
+  .stat .n em{font-style:normal;color:var(--accent)}
+  .stat p{font-family:'JetBrains Mono';font-size:11.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-soft);margin-top:12px}
+  @media(max-width:760px){.stats{grid-template-columns:1fr 1fr;gap:30px 0}.stat:nth-child(3){padding-left:0;border-left:0}}
+
+  /* ============ PROCESS ============ */
+  .proc{display:grid;grid-template-columns:repeat(2,1fr);gap:0 56px}
+  .pstep{display:grid;grid-template-columns:auto 1fr;gap:24px;padding:30px 0;border-top:1px solid var(--line);align-items:start}
+  .pstep .pn{font-family:'Bricolage Grotesque';font-weight:800;font-size:42px;color:var(--accent);line-height:.8;letter-spacing:-.04em}
+  .pstep h3{font-size:21px;font-weight:700;margin-bottom:6px}
+  .pstep p{color:var(--muted);font-size:15px}
+  @media(max-width:720px){.proc{grid-template-columns:1fr}}
+
+  /* ============ OUR WORD (pull quotes) ============ */
+  .reviews{background:var(--ink);color:var(--paper);border-top:1px solid var(--line-dark)}
+  .reviews .sec-head h2{color:var(--paper)}
+  .reviews .sec-head .num{color:#6fb4d4}
+  .rev-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0}
+  .rev{padding:38px 34px;border-left:1px solid rgba(255,255,255,.12)}
+  .rev:first-child{padding-left:0;border-left:0}
+  .rev .qm{font-family:'Bricolage Grotesque';font-weight:800;font-size:64px;line-height:.6;color:var(--accent);opacity:.9}
+  .rev p{font-size:18px;line-height:1.5;margin:18px 0 24px;color:#e6ebea;font-weight:400}
+  .rev .who{font-family:'JetBrains Mono';font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:#96a4a6}
+  .rev .who b{color:var(--paper);font-family:'Bricolage Grotesque';font-size:15px;letter-spacing:0;display:block;text-transform:none;margin-bottom:3px}
+  @media(max-width:820px){.rev-grid{grid-template-columns:1fr}.rev{border-left:0;border-top:1px solid rgba(255,255,255,.12);padding-left:0}.rev:first-child{border-top:0}}
+
+  /* ============ CTA / FORM ============ */
+  .quote{border-top:1px solid var(--line)}
+  .q-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:64px;align-items:start}
+  .q-grid h2{font-size:clamp(36px,5vw,58px);font-weight:800}
+  .q-grid .lede{color:var(--muted);font-size:17px;margin:20px 0 30px;max-width:42ch}
+  .ticks{list-style:none;display:grid;gap:0}
+  .ticks li{display:flex;gap:16px;align-items:center;padding:16px 0;border-top:1px solid var(--line);font-family:'Bricolage Grotesque';font-weight:600;font-size:16px}
+  .ticks li:last-child{border-bottom:1px solid var(--line)}
+  .ticks .tk{font-family:'JetBrains Mono';font-size:12px;color:var(--accent);font-weight:600}
+  .form{background:transparent}
+  .form .fh{font-family:'JetBrains Mono';font-size:12px;text-transform:uppercase;letter-spacing:.12em;color:var(--ink-soft);margin-bottom:26px}
+  .form .field{margin-bottom:26px}
+  .form label{display:block;font-family:'Bricolage Grotesque';font-weight:600;font-size:14px;margin-bottom:8px}
+  .form input,.form select{width:100%;padding:10px 2px;border:0;border-bottom:1.5px solid var(--ink);background:transparent;font-size:17px;font-family:'Inter';color:var(--ink)}
+  .form input::placeholder{color:#a2adaf}
+  .form input:focus,.form select:focus{outline:none;border-bottom-color:var(--accent)}
+  .form .btn{width:100%;justify-content:center;margin-top:8px;font-size:16px;padding:18px}
+  .form .fine{font-size:12.5px;color:var(--muted);margin-top:16px;text-align:center}
+  @media(max-width:820px){.q-grid{grid-template-columns:1fr;gap:44px}}
+
+  /* ============ FOOTER ============ */
+  footer{background:var(--ink);color:#96a4a6;border-top:1px solid var(--line-dark)}
+  .foot-word{font-family:'Bricolage Grotesque';font-weight:800;font-size:clamp(48px,12vw,150px);line-height:.85;letter-spacing:-.04em;color:var(--paper);padding:60px 0 40px;border-bottom:1px solid rgba(255,255,255,.1)}
+  .foot-word em{font-style:italic;font-weight:600;color:var(--accent)}
+  .foot-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:30px;padding:44px 0}
+  .foot-cols h4{font-family:'JetBrains Mono';font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:#6d7d80;margin-bottom:14px;font-weight:600}
+  .foot-cols a,.foot-cols p{color:#ccd6d5;font-size:15px;line-height:1.9;display:block}
+  .foot-cols a:hover{color:var(--paper)}
+  .foot-legal{padding:24px 0 40px;font-family:'JetBrains Mono';font-size:11px;letter-spacing:.06em;color:#5c6b6e;border-top:1px solid rgba(255,255,255,.08)}
+
+  /* ============ SNAPSHOT BAND ============ */
+  .gsnap{background:var(--paper);border-bottom:1px solid var(--line)}
+  .gsnap .wrap{display:flex;flex-wrap:wrap;align-items:center;gap:16px 32px;padding:22px 32px}
+  .gsnap .gitem{display:flex;align-items:center;gap:12px}
+  .gsnap .g-rate b{font-family:'Bricolage Grotesque';font-weight:800;font-size:30px;line-height:1}
+  .gsnap .g-sub{font-family:'JetBrains Mono';font-size:10.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-soft);margin-top:3px}
+  .gsnap .divider{width:1px;height:34px;background:var(--line)}
+  .gsnap .g-hours{font-family:'JetBrains Mono';font-size:11.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-soft)}
+  .gsnap .g-call{margin-left:auto;font-family:'Bricolage Grotesque';font-weight:700;font-size:15px;border-bottom:2px solid var(--accent);padding-bottom:2px}
+  @media(max-width:720px){.gsnap .divider{display:none}.gsnap .g-call{margin-left:0}}
+
+  /* ============ SERVICE AREA / MAP ============ */
+  .area-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:48px;align-items:start}
+  .area-towns{list-style:none;columns:2;column-gap:20px}
+  .area-towns li{padding:9px 0;border-top:1px solid var(--line);font-family:'JetBrains Mono';font-size:12.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-soft);break-inside:avoid}
+  .area-towns li::before{content:"◆";color:var(--accent);font-size:8px;margin-right:9px;vertical-align:middle}
+  #map{height:440px;border:1px solid var(--line);background:var(--paper-2);position:relative;z-index:0}
+  .map-cap{font-family:'JetBrains Mono';font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-soft);margin-top:12px}
+  .leaflet-container{font-family:'JetBrains Mono',monospace;background:var(--paper-2)!important}
+  @media(max-width:820px){.area-grid{grid-template-columns:1fr;gap:30px}#map{height:340px}}
+
+  /* sticky mobile call */
+  .scall{display:none}
+  @media(max-width:820px){.scall{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:60;background:var(--ink);color:var(--paper);
+    font-family:'Bricolage Grotesque';font-weight:700;align-items:center;justify-content:center;gap:10px;padding:16px;border-top:1px solid var(--accent)}
+    body{padding-bottom:58px}}
+
+  /* scroll reveal */
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.8,.2,1)}
+  .reveal.in{opacity:1;transform:none}
+  @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none}.ticker-track{animation:none}}
+</style>
+</head>
+<body id="top">
+
+  <!-- NAV -->
+  <header class="nav">
+    <div class="wrap">
+      <a href="#top" class="brand">Stick's <i>Eudora, KS</i></a>
+      <nav class="nav-links">
+        <a href="#services">Services</a>
+        <a href="#area">Service Area</a>
+        <a href="#word">Our Word</a>
+        <a href="#quote">Estimate</a>
+      </nav>
+      <a href="tel:17857664819" class="cta-phone">(785) 766-4819</a>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-meta">
+        <span class="mono">Pool Service · Eudora, KS</span>
+        <p class="loc">Serving Eudora, Lawrence &amp; the KC metro — openings to closings and every week between.</p>
+      </div>
+      <h1>Clear water.<br>Zero <span class="em">work.</span></h1>
+      <div class="hero-lower">
+        <p class="hero-sub">Weekly cleaning, chemical balancing, openings, closings, and equipment repair — handled by a pool pro with 25+ years in the water, so the only thing you do is swim.</p>
+        <div class="hero-actions">
+          <div class="row">
+            <a href="#quote" class="btn">Get a free estimate <span class="arr">→</span></a>
+            <a href="tel:17857664819" class="btn btn-out">Call now</a>
+          </div>
+          <span class="mono" style="color:var(--ink-soft)">Free estimates · Weekly &amp; seasonal service</span>
+        </div>
+      </div>
+    </div>
+    <div class="hero-spec">
+      <div class="wrap">
+        <span>25+ Years Experience</span><span>Free Estimates</span><span>Locally Owned — Eudora, KS</span><span>Openings · Closings · Weekly Care</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- TICKER -->
+  <div class="ticker">
+    <div class="ticker-track">
+      <span>25+ Years of Pool Experience</span><span>Free Estimates</span><span>Locally Owned &amp; Operated</span><span>Openings &amp; Closings</span><span>Weekly Cleaning &amp; Chemicals</span>
+      <span>25+ Years of Pool Experience</span><span>Free Estimates</span><span>Locally Owned &amp; Operated</span><span>Openings &amp; Closings</span><span>Weekly Cleaning &amp; Chemicals</span>
+    </div>
+  </div>
+
+  <!-- SNAPSHOT -->
+  <div class="gsnap">
+    <div class="wrap">
+      <div class="gitem g-rate">
+        <b>25+</b>
+        <div><div class="g-sub">Years of hands-on<br>pool experience</div></div>
+      </div>
+      <div class="divider"></div>
+      <div class="gitem"><div class="g-hours">Free estimates · No obligation</div></div>
+      <div class="divider"></div>
+      <div class="gitem"><div class="g-hours">Eudora · Lawrence · Johnson &amp; Douglas Co.</div></div>
+      <a href="tel:17857664819" class="g-call">Call (785) 766-4819</a>
+    </div>
+  </div>
+
+  <!-- SERVICES -->
+  <section class="sec wrap" id="services">
+    <div class="sec-head reveal">
+      <span class="num">01</span>
+      <h2>Everything your pool needs</h2>
+      <p class="lede">From the first consultation to perfect water, we handle all of it — you'll be surprised how simple we make the whole thing.</p>
+    </div>
+    <div class="svc-list">
+      <div class="svc-row reveal">
+        <span class="si">01</span>
+        <div class="sc"><h3>Weekly Cleaning &amp; Maintenance</h3><p>Skimming, vacuuming, brushing, baskets emptied, and water chemistry tested and balanced — on a schedule you never have to think about.</p></div>
+        <div class="sk">Weekly · Biweekly<br>Chemicals included</div>
+      </div>
+      <div class="svc-row reveal">
+        <span class="si">02</span>
+        <div class="sc"><h3>Openings &amp; Closings</h3><p>Done right in spring so the season starts clear, and winterized properly in fall so nothing cracks, freezes, or greets you green in May.</p></div>
+        <div class="sk">Spring · Fall<br>Winterization</div>
+      </div>
+      <div class="svc-row reveal">
+        <span class="si">03</span>
+        <div class="sc"><h3>Heater &amp; Equipment Repair</h3><p>Heaters installed, replaced, and repaired — plus pumps, filters, and the rest of the pad. We diagnose it honestly and fix what actually needs fixing.</p></div>
+        <div class="sk">Heaters · Pumps<br>Filters</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EVERY VISIT -->
+  <section class="sec work" id="work">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="num">02</span>
+        <h2>What every visit includes</h2>
+        <p class="lede">The same standard at every pool we service — no surprises, no upcharges, nothing skipped.</p>
+      </div>
+      <div class="joblog">
+        <div class="job reveal">
+          <span class="jno">01</span>
+          <div class="jmain"><h3>Free estimate first</h3><p>We look at your pool and give honest, upfront pricing before any work begins.</p></div>
+          <div class="jmeta"><span>No obligation</span></div>
+        </div>
+        <div class="job reveal">
+          <span class="jno">02</span>
+          <div class="jmain"><h3>Full-service clean</h3><p>Surface skimmed, floor vacuumed, walls brushed, baskets and traps emptied — every single visit.</p></div>
+          <div class="jmeta"><span>Every visit</span></div>
+        </div>
+        <div class="job reveal">
+          <span class="jno">03</span>
+          <div class="jmain"><h3>Water tested &amp; balanced</h3><p>Chemistry checked and adjusted so your water stays clear, safe, and easy on skin and equipment.</p></div>
+          <div class="jmeta"><span>Dialed in</span></div>
+        </div>
+        <div class="job reveal">
+          <span class="jno">04</span>
+          <div class="jmain"><h3>Equipment eyes-on</h3><p>We check the pump, filter, and heater while we're there — small problems get caught before they become expensive ones.</p></div>
+          <div class="jmeta"><span>Caught early</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICE AREA -->
+  <section class="sec wrap" id="area">
+    <div class="sec-head reveal">
+      <span class="num">03</span>
+      <h2>Where we work</h2>
+      <p class="lede">Based in Eudora, covering Lawrence and the western KC metro. If you're inside the ring, we can be on your schedule.</p>
+    </div>
+    <div class="area-grid reveal">
+      <ul class="area-towns">
+        <li>Eudora</li><li>Lawrence</li><li>De Soto</li><li>Baldwin City</li>
+        <li>Linwood</li><li>Tonganoxie</li><li>Olathe</li><li>Lenexa</li>
+        <li>Shawnee</li><li>Overland Park</li>
+      </ul>
+      <div>
+        <div id="map"></div>
+        <div class="map-cap">Fig. — Service radius from Eudora, KS</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section class="sec wrap">
+    <div class="stats reveal">
+      <div class="stat"><div class="n">25<em>+</em></div><p>Years in pools</p></div>
+      <div class="stat"><div class="n">100<em>%</em></div><p>Free estimates</p></div>
+      <div class="stat"><div class="n">4</div><p>Seasons covered — open to close</p></div>
+      <div class="stat"><div class="n">0</div><p>Things left for you to do</p></div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section class="sec wrap">
+    <div class="sec-head reveal">
+      <span class="num">04</span>
+      <h2>Simple, no pressure</h2>
+      <p class="lede">Four steps from your call to a pool that takes care of itself. No contracts pushed, no surprise charges.</p>
+    </div>
+    <div class="proc">
+      <div class="pstep reveal"><span class="pn">01</span><div><h3>Reach Out</h3><p>Call, text, or send the form — tell us about your pool and what it needs.</p></div></div>
+      <div class="pstep reveal"><span class="pn">02</span><div><h3>Free Estimate</h3><p>We take a look and give honest, upfront pricing — no surprises, no obligation.</p></div></div>
+      <div class="pstep reveal"><span class="pn">03</span><div><h3>On the Schedule</h3><p>Weekly, biweekly, or seasonal — your pool gets a standing slot and we show up.</p></div></div>
+      <div class="pstep reveal"><span class="pn">04</span><div><h3>Just Swim</h3><p>Clear water, balanced chemistry, working equipment. The rest is our problem.</p></div></div>
+    </div>
+  </section>
+
+  <!-- OUR WORD -->
+  <section class="sec reviews" id="word">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <span class="num">05</span>
+        <h2>Our word</h2>
+        <p class="lede" style="color:#96a4a6">No fine print — just how we run every pool we take on.</p>
+      </div>
+      <div class="rev-grid">
+        <div class="rev reveal"><div class="qm">“</div><p>We will always treat your property as we would treat our own. That's not a slogan — it's the whole business model.</p><div class="who"><b>The Stick's promise</b>Every pool, every visit</div></div>
+        <div class="rev reveal"><div class="qm">“</div><p>From the first consultation to perfect water, you'll be surprised how simple and easy we make the whole process.</p><div class="who"><b>Start to finish</b>Consultation to clear water</div></div>
+        <div class="rev reveal"><div class="qm">“</div><p>Twenty-five years in pools means there's not much your water can do that we haven't already seen — and fixed.</p><div class="who"><b>Experience that shows</b>25+ years in the water</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA / FORM -->
+  <section class="sec quote wrap" id="quote">
+    <div class="q-grid">
+      <div class="reveal">
+        <span class="num">06</span>
+        <h2 style="margin-top:14px">Get your free<br>pool estimate</h2>
+        <p class="lede">A local, experienced pool pro Eudora and Lawrence homeowners can actually get on the phone — with honest pricing and no pressure.</p>
+        <ul class="ticks">
+          <li><span class="tk">01</span> No-cost, no-obligation estimate</li>
+          <li><span class="tk">02</span> Weekly, biweekly, or one-time service</li>
+          <li><span class="tk">03</span> Openings, closings &amp; repairs handled</li>
+        </ul>
+      </div>
+      <form class="form reveal" onsubmit="return false">
+        <div class="fh">Request a callback — usually same day</div>
+        <div class="field"><label>Full name</label><input type="text" placeholder="John Smith"></div>
+        <div class="field"><label>Phone</label><input type="tel" placeholder="(785) 766-4819"></div>
+        <div class="field"><label>What does your pool need?</label><select><option>Weekly cleaning &amp; maintenance</option><option>Opening or closing</option><option>Heater or equipment repair</option><option>Not sure yet</option></select></div>
+        <button class="btn" type="submit">Send my request <span class="arr">→</span></button>
+        <p class="fine">We'll call you back fast. No spam, no obligation.</p>
+      </form>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="wrap">
+      <div class="foot-word">Stick's<em>.</em></div>
+      <div class="foot-cols">
+        <div>
+          <h4>Contact</h4>
+          <a href="tel:17857664819">(785) 766-4819</a>
+          <p>Free estimates, always</p>
+        </div>
+        <div>
+          <h4>Season</h4>
+          <p>Openings in spring · Closings in fall</p>
+          <p>Weekly service all summer</p>
+        </div>
+        <div>
+          <h4>Service Area</h4>
+          <p>Eudora · Lawrence · De Soto</p>
+          <p>Johnson &amp; Douglas County, KS</p>
+        </div>
+      </div>
+      <div class="foot-legal">© 2026 Stick's Pool Service · Eudora, KS · Free estimates on all work</div>
+    </div>
+  </footer>
+
+  <a href="tel:17857664819" class="scall">Call now — free estimate</a>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    // scroll reveals
+    const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.12});
+    document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+    // service-area map (Leaflet + free Carto light tiles, no API key)
+    (function(){
+      if(typeof L==='undefined'||!document.getElementById('map'))return;
+      const center=[38.9434,-95.0986]; // Eudora, KS
+      const map=L.map('map',{scrollWheelZoom:false,zoomControl:true}).setView(center,9);
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
+        {subdomains:'abcd',maxZoom:19,attribution:'© OpenStreetMap, © CARTO'}).addTo(map);
+      L.circle(center,{radius:40000,color:'#0f6187',weight:1.5,fillColor:'#0f6187',fillOpacity:.08}).addTo(map);
+      L.circleMarker(center,{radius:7,color:'#fff',weight:2,fillColor:'#0f6187',fillOpacity:1})
+        .addTo(map).bindPopup("Stick's Pool Service — Eudora, KS");
+      setTimeout(()=>map.invalidateSize(),300);
+    })();
+  </script>
+</body>
+</html>
