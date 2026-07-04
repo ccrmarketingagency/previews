@@ -88,14 +88,12 @@
   .hero-actions .row{display:flex;gap:14px;flex-wrap:wrap}
   @media(max-width:760px){.hero-lower{grid-template-columns:1fr;gap:26px}}
 
-  /* ============ 3D WATER ============ */
-  .hero-water{position:relative;height:46vh;min-height:320px;max-height:480px;overflow:hidden;border-top:1px solid var(--line);
-    background:linear-gradient(180deg,#e8f1f4 0%,#d3e6ed 55%,#c3dde7 100%)}
-  .hero-water canvas{width:100%;height:100%;display:block;touch-action:pan-y}
-  .hero-water figcaption{position:absolute;left:0;bottom:0;background:var(--ink);color:var(--paper);font-family:'JetBrains Mono';font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:9px 16px;pointer-events:none}
-
   /* ============ PHOTOS ============ */
-  .trio{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .hero-photo{position:relative;height:48vh;min-height:340px;max-height:520px;overflow:hidden;border-top:1px solid var(--line)}
+  .hero-photo img{width:100%;height:100%;object-fit:cover;filter:grayscale(.25) contrast(1.05) saturate(.9);transition:filter .6s ease;display:block}
+  .hero-photo:hover img{filter:none}
+  .hero-photo figcaption{position:absolute;left:0;bottom:0;background:var(--ink);color:var(--paper);font-family:'JetBrains Mono';font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:9px 16px}
+  .trio{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
   .trio figure{position:relative;margin:0;overflow:hidden;background:var(--paper);transition:transform .25s ease;will-change:transform}
   .trio img{width:100%;height:320px;object-fit:cover;display:block;filter:grayscale(.25) contrast(1.05) saturate(.9);transition:filter .6s ease}
   .trio figure:hover img{filter:none}
@@ -283,9 +281,9 @@
         <span>25+ Years Experience</span><span>Free Estimates</span><span>Locally Owned · Eudora, KS</span><span>Pools · Spas · Openings to Closings</span>
       </div>
     </div>
-    <figure class="hero-water" id="water-wrap">
-      <canvas id="water"></canvas>
-      <figcaption>Live water · move your cursor through it</figcaption>
+    <figure class="hero-photo">
+      <img src="https://images.pexels.com/photos/261238/pexels-photo-261238.jpeg?auto=compress&cs=tinysrgb&w=1600" alt="Clean backyard swimming pool with clear blue water" loading="eager">
+      <figcaption>The standard: clear, balanced, swim ready</figcaption>
     </figure>
   </section>
 
@@ -385,9 +383,8 @@
     </div>
   </section>
 
-  <!-- PHOTO TRIO -->
+  <!-- PHOTO PAIR -->
   <div class="trio">
-    <figure data-tilt><img src="https://images.pexels.com/photos/261238/pexels-photo-261238.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Clean backyard swimming pool with clear blue water" loading="lazy"><figcaption>The standard: clear and swim ready</figcaption></figure>
     <figure data-tilt><img src="https://images.pexels.com/photos/11484104/pexels-photo-11484104.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Pool ladder in a clean, tiled swimming pool" loading="lazy"><figcaption>Equipment checked every visit</figcaption></figure>
     <figure data-tilt><img src="https://images.pexels.com/photos/8688171/pexels-photo-8688171.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Poolside with sparkling blue water" loading="lazy"><figcaption>Water balanced weekly</figcaption></figure>
   </div>
@@ -505,7 +502,6 @@
   <a href="tel:17857664819" class="scall">Call now · free estimate</a>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script>
     // scroll reveals
     var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.12});
@@ -545,72 +541,6 @@
         });
         f.addEventListener('pointerleave',function(){f.style.transform='';});
       });
-    })();
-
-    // 3D water (three.js): animated surface with cursor ripples
-    (function(){
-      if(typeof THREE==='undefined')return;
-      var wrap=document.getElementById('water-wrap');
-      var canvas=document.getElementById('water');
-      if(!wrap||!canvas)return;
-      var reduced=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      var renderer;
-      try{renderer=new THREE.WebGLRenderer({canvas:canvas,antialias:true,alpha:true});}catch(err){return;}
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
-      var scene=new THREE.Scene();
-      var camera=new THREE.PerspectiveCamera(38,2,.1,120);
-      camera.position.set(0,7.5,16);
-      camera.lookAt(0,0,0);
-      scene.add(new THREE.HemisphereLight(0xe6f2f7,0x0a3a52,.95));
-      var dir=new THREE.DirectionalLight(0xffffff,.8);
-      dir.position.set(6,10,4);
-      scene.add(dir);
-      var geo=new THREE.PlaneGeometry(48,26,120,64);
-      geo.rotateX(-Math.PI/2);
-      var mat=new THREE.MeshStandardMaterial({color:0x0f6187,roughness:.42,metalness:.08,flatShading:true});
-      var mesh=new THREE.Mesh(geo,mat);
-      scene.add(mesh);
-      var pos=geo.attributes.position;
-      var base=Float32Array.from(pos.array);
-      var t=0,mx=0,mz=0,ripple=0,camX=0,targetCamX=0;
-      function size(){
-        var w=wrap.clientWidth,h=wrap.clientHeight;
-        renderer.setSize(w,h,false);
-        camera.aspect=w/h;
-        camera.updateProjectionMatrix();
-      }
-      size();
-      window.addEventListener('resize',size);
-      wrap.addEventListener('pointermove',function(e){
-        var r=wrap.getBoundingClientRect();
-        var nx=(e.clientX-r.left)/r.width*2-1;
-        var ny=(e.clientY-r.top)/r.height*2-1;
-        mx=nx*22;
-        mz=ny*11;
-        ripple=1;
-        targetCamX=nx*1.4;
-      },{passive:true});
-      function frame(){
-        t+=0.016;
-        ripple*=0.968;
-        camX+=(targetCamX-camX)*0.04;
-        camera.position.x=camX;
-        camera.lookAt(0,0,0);
-        var a=pos.array;
-        for(var i=0;i<a.length;i+=3){
-          var x=base[i],z=base[i+2];
-          var y=Math.sin(x*.55+t*1.2)*.3+Math.sin(z*.7+t*.9)*.24+Math.sin((x+z)*.32+t*.6)*.16;
-          var dx=x-mx,dz=z-mz;
-          var d=Math.sqrt(dx*dx+dz*dz);
-          y+=Math.sin(d*1.7-t*5.2)*.55*ripple*Math.exp(-d*.3);
-          a[i+1]=y;
-        }
-        pos.needsUpdate=true;
-        geo.computeVertexNormals();
-        renderer.render(scene,camera);
-        if(!reduced)requestAnimationFrame(frame);
-      }
-      frame();
     })();
 
     // service area map (Leaflet + free Carto light tiles, no API key)
